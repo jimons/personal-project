@@ -1,0 +1,110 @@
+#include<stdio.h>
+#include<iostream>
+#include<stdlib.h>
+#include<cmath>
+#include<vector>
+#include<cstring>
+#include<stack>
+#include<set>
+#include<string.h>
+using namespace std;
+
+#define MAXN 15000//宏定义
+FILE *fp1; 
+struct word{
+	char letter[100];
+	int num; 
+};
+
+struct compare{
+	
+	bool operator()(const word& e1, const word& e2)const{
+	if(e1.letter[0]<=e2.letter[0]  ) 
+     return true;
+    return false;
+	}
+	
+};
+set<word,compare>wordin;
+
+
+void input()
+{
+	
+	fp1=fopen("WordCount.txt","r+");
+	int characters=0,words=0,lines=0,count=0,num,flag,repeatnum;
+	    char str[100];
+
+     	while(fgets(str,98,fp1)!=NULL)
+	{
+		lines++;
+		flag=0;
+	characters+=strlen(str);
+	for(int i=0;i<strlen(str)-1;i++)
+	{
+		if(str[i]>=65 && str[i]<=90)
+		    {
+		    	 str[i]+=32;
+			}
+	}
+	
+	if(str[0]>=97 && str[0]<=122)
+     {words++;
+     			 word i_word;
+     	strncpy(i_word.letter,str,sizeof(i_word.letter));
+     	set<word, compare>::iterator itr;
+     	for(itr=wordin.begin() ;itr!=wordin.end() ;itr++)
+     	{   
+     		if(stricmp(str,itr->letter)==0)
+     		    { 
+     		         
+				     flag=1;
+     		    	i_word.num=itr->num+1;
+     		    	wordin.erase(itr);
+					 break; 
+				 }
+     		
+		 }
+		
+		if(flag==1)
+		{
+			wordin.insert(i_word); 
+				}		
+	if(flag==0){
+		 i_word.num=1;
+		 wordin.insert(i_word);	
+	} 
+     	
+	 }
+	
+	
+			
+	}
+	
+		cout<<"characters:"<<characters<<endl;
+		cout<<"lines:"<<lines<<endl;
+		cout<<"words:"<<words<<endl;
+	
+		set<word, compare>::iterator itr;
+     	for(itr=wordin.begin() ;itr!=wordin.end() ;itr++)
+     	{
+     		cout<<itr->letter<<":"<<itr->num<<endl;
+     		
+		 }
+	
+		
+
+	
+}
+
+
+
+
+
+int main()
+{
+	
+	input();
+	
+	
+}
